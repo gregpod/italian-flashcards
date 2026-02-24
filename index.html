@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Italian Flashcards</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #1a1a2e;
+    color: #eee;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+
+  /* ── Navigation ── */
+  nav {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 32px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 860px;
+  }
+
+  nav button {
+    background: transparent;
+    color: #667;
+    border: 1px solid #2a2a4a;
+    border-radius: 20px;
+    padding: 8px 18px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+
+  nav button:hover {
+    color: #aaa;
+    border-color: #445;
+    background: rgba(255,255,255,0.03);
+  }
+
+  nav button.active {
+    color: #fff;
+    background: #0f3460;
+    border-color: #1a5a9a;
+  }
+
+  /* ── Main area ── */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+    color: #e0e0e0;
+    letter-spacing: 0.5px;
+  }
+
+  .progress {
+    font-size: 0.95rem;
+    color: #888;
+    margin-bottom: 24px;
+  }
+
+  /* ── Card ── */
+  .card-container {
+    perspective: 800px;
+    width: 420px;
+    height: 320px;
+    cursor: pointer;
+    margin-bottom: 28px;
+  }
+
+  .card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
+  }
+
+  .card.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+
+  .card-front {
+    background: linear-gradient(135deg, #16213e, #0f3460);
+    border: 1px solid #1a3a6a;
+  }
+
+  .card-front .word {
+    font-size: 3rem;
+    font-weight: 700;
+    font-style: italic;
+    color: #fff;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .card-front .category-label {
+    margin-top: 12px;
+    font-size: 0.75rem;
+    color: #4a5a7a;
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .card-front .hint {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #667;
+    font-style: normal;
+  }
+
+  .card-back {
+    transform: rotateY(180deg);
+    text-align: center;
+  }
+
+  /* ── Verb back ── */
+  .card-back.verb-back {
+    background: linear-gradient(135deg, #1a3a2e, #0f4a3a);
+    border: 1px solid #1a6a4a;
+  }
+
+  /* ── Adverb back ── */
+  .card-back.adverb-back {
+    background: linear-gradient(135deg, #2e1a3a, #3a0f4a);
+    border: 1px solid #5a1a6a;
+  }
+
+  /* ── Adjective back ── */
+  .card-back.adjective-back {
+    background: linear-gradient(135deg, #3a2e1a, #4a3a0f);
+    border: 1px solid #6a5a1a;
+  }
+
+  /* ── Casa back ── */
+  .card-back.casa-back {
+    background: linear-gradient(135deg, #3a1a0a, #4a2a10);
+    border: 1px solid #7a4a20;
+  }
+
+  /* ── Città back ── */
+  .card-back.citta-back {
+    background: linear-gradient(135deg, #0a1e3a, #10264a);
+    border: 1px solid #20406a;
+  }
+
+  /* ── Trasporti back ── */
+  .card-back.trasporti-back {
+    background: linear-gradient(135deg, #0a2a2e, #10383a);
+    border: 1px solid #20585a;
+  }
+
+  /* ── Espressioni back ── */
+  .card-back.espressioni-back {
+    background: linear-gradient(135deg, #0a2e12, #124020);
+    border: 1px solid #206030;
+  }
+
+  /* ── Negozi back ── */
+  .card-back.negozi-back {
+    background: linear-gradient(135deg, #280a3a, #380f4a);
+    border: 1px solid #502060;
+  }
+
+  /* ── Preposizioni back ── */
+  .card-back.preposizioni-back {
+    background: linear-gradient(135deg, #2e1a0a, #4a2e10);
+    border: 1px solid #6a4820;
+  }
+
+  /* ── Alloggio back ── */
+  .card-back.alloggio-back {
+    background: linear-gradient(135deg, #3a0a18, #4a1022);
+    border: 1px solid #7a2040;
+  }
+
+  /* ── Hotel back ── */
+  .card-back.hotel-back {
+    background: linear-gradient(135deg, #2a1e06, #3a2c0a);
+    border: 1px solid #6a540e;
+  }
+
+  /* ── Mesi back ── */
+  .card-back.mesi-back {
+    background: linear-gradient(135deg, #060a36, #0a1044);
+    border: 1px solid #141a70;
+  }
+
+  /* ── Oggetti back ── */
+  .card-back.oggetti-back {
+    background: linear-gradient(135deg, #0a2018, #102a20);
+    border: 1px solid #1a5038;
+  }
+
+  /* ── Stagioni back ── */
+  .card-back.stagioni-back {
+    background: linear-gradient(135deg, #061a08, #0c280e);
+    border: 1px solid #144820;
+  }
+
+  /* ── Tempo back ── */
+  .card-back.tempo-back {
+    background: linear-gradient(135deg, #1c0a30, #260f3c);
+    border: 1px solid #461a60;
+  }
+
+  /* ── English text colors ── */
+  .card-back .english {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .card-back.verb-back .english       { color: #7fdbca; }
+  .card-back.adverb-back .english     { color: #c9a0dc; }
+  .card-back.adjective-back .english  { color: #dcc9a0; }
+  .card-back.casa-back .english       { color: #f0b090; }
+  .card-back.citta-back .english      { color: #90b8f0; }
+  .card-back.trasporti-back .english  { color: #80ede0; }
+  .card-back.espressioni-back .english{ color: #b0f0b0; }
+  .card-back.negozi-back .english     { color: #e0a0f0; }
+  .card-back.preposizioni-back .english { color: #f0c870; }
+  .card-back.alloggio-back .english    { color: #f090a8; }
+  .card-back.hotel-back .english       { color: #f0e060; }
+  .card-back.mesi-back .english        { color: #a0a0f8; }
+  .card-back.oggetti-back .english     { color: #70e8d0; }
+  .card-back.stagioni-back .english    { color: #80f060; }
+  .card-back.tempo-back .english       { color: #d070f0; }
+
+  .card-back .example {
+    font-size: 1rem;
+    color: #bbb;
+    line-height: 1.6;
+    max-width: 320px;
+  }
+
+  .card-back .example em {
+    color: #c9a0dc;
+    font-style: italic;
+  }
+
+  .card-back .example .translation {
+    display: block;
+    margin-top: 4px;
+    color: #888;
+    font-size: 0.9rem;
+  }
+
+  .conjugation-table {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .conjugation-table .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .conjugation-table .pronoun {
+    color: #999;
+    width: 80px;
+    text-align: left;
+  }
+
+  .conjugation-table .form {
+    color: #e0e0e0;
+    font-weight: 500;
+    text-align: left;
+    flex: 1;
+  }
+
+  /* ── Controls ── */
+  .controls {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  button {
+    background: #16213e;
+    color: #ccc;
+    border: 1px solid #334;
+    border-radius: 10px;
+    padding: 12px 28px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  button:hover {
+    background: #1f3460;
+    color: #fff;
+  }
+
+  button.primary {
+    background: #0f3460;
+    color: #fff;
+    border-color: #1a5a9a;
+  }
+
+  button.primary:hover {
+    background: #1a5aaa;
+  }
+
+  .restart-btn {
+    margin-top: 20px;
+    font-size: 0.85rem;
+    padding: 8px 20px;
+    background: transparent;
+    border-color: #444;
+    color: #777;
+  }
+
+  .restart-btn:hover {
+    color: #ccc;
+    border-color: #666;
+  }
+
+  .done-message {
+    text-align: center;
+  }
+
+  .done-message h2 {
+    font-size: 1.8rem;
+    margin-bottom: 12px;
+    color: #7fdbca;
+  }
+
+  .done-message p {
+    color: #999;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 480px) {
+    .card-container { width: 100%; height: 300px; }
+    .card-front .word { font-size: 2.2rem; }
+    .card-back .english { font-size: 1.2rem; }
+    .conjugation-table .row { font-size: 0.85rem; }
+    button { padding: 10px 20px; font-size: 0.9rem; }
+    nav button { padding: 6px 14px; font-size: 0.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <button onclick="setCategory('verbi')"      id="nav-verbi">Gli Verbi Irregolari</button>
+  <button onclick="setCategory('avverbi')"    id="nav-avverbi">Gli Avverbi di Frequenza</button>
+  <button onclick="setCategory('aggettivi')"  id="nav-aggettivi">Gli Aggettivi</button>
+  <button onclick="setCategory('casa')"       id="nav-casa">La Casa</button>
+  <button onclick="setCategory('citta')"      id="nav-citta">La Città</button>
+  <button onclick="setCategory('trasporti')"  id="nav-trasporti">I Trasporti</button>
+  <button onclick="setCategory('espressioni')" id="nav-espressioni">Espressioni Utili</button>
+  <button onclick="setCategory('negozi')"     id="nav-negozi">Negozi e Servizi</button>
+  <button onclick="setCategory('preposizioni')" id="nav-preposizioni">Le Preposizioni</button>
+  <button onclick="setCategory('alloggio')"   id="nav-alloggio">Tipi di Alloggio</button>
+  <button onclick="setCategory('hotel')"      id="nav-hotel">In The Hotel</button>
+  <button onclick="setCategory('mesi')"       id="nav-mesi">I Mesi</button>
+  <button onclick="setCategory('oggetti')"    id="nav-oggetti">Oggetti di Casa</button>
+  <button onclick="setCategory('stagioni')"   id="nav-stagioni">Le Stagioni</button>
+  <button onclick="setCategory('tempo')"      id="nav-tempo">Indicatori di Tempo</button>
+  <button onclick="setCategory('all')"        id="nav-all">Tutto</button>
+</nav>
+
+<div class="main">
+  <h1 id="title">Italian Flashcards</h1>
+  <div class="progress" id="progress"></div>
+
+  <div id="card-area">
+    <div class="card-container" id="card-container" onclick="flipCard()">
+      <div class="card" id="card">
+        <div class="card-face card-front">
+          <div class="word" id="word-front"></div>
+          <div class="category-label" id="category-label"></div>
+          <div class="hint">click to reveal</div>
+        </div>
+        <div class="card-face card-back" id="card-back">
+          <div class="english" id="english"></div>
+          <div class="conjugation-table" id="conjugation"></div>
+          <div class="example" id="example"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="primary" id="next-btn" onclick="nextCard()">Next &rarr;</button>
+    </div>
+
+    <button class="restart-btn" onclick="restart()">Shuffle &amp; Restart</button>
+  </div>
+
+  <div class="done-message" id="done" style="display:none;">
+    <h2>Bravo!</h2>
+    <p id="done-text"></p>
+    <button class="primary" onclick="restart()">Go Again</button>
+  </div>
+</div>
+
+<script>
+/* ── Data ── */
+const verbi = [
+  { type: "verb", word: "andare",   english: "to go",             conjugation: ["vado","vai","va","andiamo","andate","vanno"] },
+  { type: "verb", word: "avere",    english: "to have",           conjugation: ["ho","hai","ha","abbiamo","avete","hanno"] },
+  { type: "verb", word: "bere",     english: "to drink",          conjugation: ["bevo","bevi","beve","beviamo","bevete","bevono"] },
+  { type: "verb", word: "dare",     english: "to give",           conjugation: ["do","dai","dà","diamo","date","danno"] },
+  { type: "verb", word: "dire",     english: "to say / to tell",  conjugation: ["dico","dici","dice","diciamo","dite","dicono"] },
+  { type: "verb", word: "essere",   english: "to be",             conjugation: ["sono","sei","è","siamo","siete","sono"] },
+  { type: "verb", word: "fare",     english: "to do / to make",   conjugation: ["faccio","fai","fa","facciamo","fate","fanno"] },
+  { type: "verb", word: "rimanere", english: "to remain / to stay", conjugation: ["rimango","rimani","rimane","rimaniamo","rimanete","rimangono"] },
+  { type: "verb", word: "scegliere",english: "to choose",         conjugation: ["scelgo","scegli","sceglie","scegliamo","scegliete","scelgono"] },
+  { type: "verb", word: "stare",    english: "to stay / to be",   conjugation: ["sto","stai","sta","stiamo","state","stanno"] },
+  { type: "verb", word: "uscire",   english: "to go out",         conjugation: ["esco","esci","esce","usciamo","uscite","escono"] },
+  { type: "verb", word: "venire",   english: "to come",           conjugation: ["vengo","vieni","viene","veniamo","venite","vengono"] }
+];
+
+const avverbi = [
+  { type: "adverb", word: "sempre",       english: "always",    example: "<em>Lui mangia sempre la pasta.</em><span class='translation'>He always eats pasta.</span>" },
+  { type: "adverb", word: "di solito",    english: "usually",   example: "<em>Di solito vado al cinema il sabato.</em><span class='translation'>I usually go to the movies on Saturdays.</span>" },
+  { type: "adverb", word: "spesso",       english: "often",     example: "<em>Spesso leggo prima di dormire.</em><span class='translation'>I often read before sleeping.</span>" },
+  { type: "adverb", word: "qualche volta",english: "sometimes", example: "<em>Qualche volta cucino la cena.</em><span class='translation'>Sometimes I cook dinner.</span>" },
+  { type: "adverb", word: "mai",          english: "never",     example: "<em>Non bevo mai il caffè.</em><span class='translation'>I never drink coffee.</span>" }
+];
+
+const aggettivi = [
+  { type: "adjective", word: "bello/a",          english: "beautiful" },
+  { type: "adjective", word: "ricco/a",           english: "rich" },
+  { type: "adjective", word: "interessante",      english: "interesting" },
+  { type: "adjective", word: "culturale",         english: "cultural" },
+  { type: "adjective", word: "particolare",       english: "particular / unique" },
+  { type: "adjective", word: "suggestivo/a",      english: "evocative" },
+  { type: "adjective", word: "pericoloso/a",      english: "dangerous" },
+  { type: "adjective", word: "sicuro/a",          english: "safe" },
+  { type: "adjective", word: "vivace",            english: "lively" },
+  { type: "adjective", word: "caratteristico/a",  english: "characteristic / typical" },
+  { type: "adjective", word: "centrale",          english: "central" },
+  { type: "adjective", word: "grande",            english: "big" },
+  { type: "adjective", word: "caotico/a",         english: "chaotic" },
+  { type: "adjective", word: "turistico/a",       english: "touristic" },
+  { type: "adjective", word: "diverso/a",         english: "different" },
+  { type: "adjective", word: "tipico/a",          english: "typical" },
+  { type: "adjective", word: "alto/a",            english: "tall / high" },
+  { type: "adjective", word: "meraviglioso/a",    english: "wonderful" },
+  { type: "adjective", word: "antico/a",          english: "ancient" },
+  { type: "adjective", word: "moderno/a",         english: "modern" },
+  { type: "adjective", word: "famoso/a",          english: "famous" },
+  { type: "adjective", word: "sconosciuto/a",     english: "unknown" },
+  { type: "adjective", word: "piccolo/a",         english: "small" },
+  { type: "adjective", word: "brutto/a",          english: "ugly" },
+  { type: "adjective", word: "basso/a",           english: "short / low" },
+  { type: "adjective", word: "lungo/a",           english: "long" },
+  { type: "adjective", word: "corto/a",           english: "short (length)" },
+  { type: "adjective", word: "rilassante",        english: "relaxing" },
+  { type: "adjective", word: "stressante",        english: "stressful" },
+  { type: "adjective", word: "tranquillo/a",      english: "calm / quiet" },
+  { type: "adjective", word: "romano/a",          english: "Roman" },
+  { type: "adjective", word: "urbano/a",          english: "urban" },
+  { type: "adjective", word: "residenziale",      english: "residential" },
+  { type: "adjective", word: "straniero/a",       english: "foreign" },
+  { type: "adjective", word: "elegante",          english: "elegant" },
+  { type: "adjective", word: "italiano/a",        english: "Italian" },
+  { type: "adjective", word: "bravo/a",           english: "good / talented" },
+  /* ── New adjectives ── */
+  { type: "adjective", word: "nuovo/a",           english: "new" },
+  { type: "adjective", word: "vecchio/a",         english: "old" },
+  { type: "adjective", word: "pulito/a",          english: "clean" },
+  { type: "adjective", word: "sporco/a",          english: "dirty" },
+  { type: "adjective", word: "comodo/a",          english: "comfortable / convenient" },
+  { type: "adjective", word: "scomodo/a",         english: "uncomfortable" },
+  { type: "adjective", word: "caldo/a",           english: "hot / warm" },
+  { type: "adjective", word: "freddo/a",          english: "cold" },
+  { type: "adjective", word: "aperto/a",          english: "open" },
+  { type: "adjective", word: "chiuso/a",          english: "closed" },
+  { type: "adjective", word: "veloce",            english: "fast / quick" },
+  { type: "adjective", word: "lento/a",           english: "slow" },
+  { type: "adjective", word: "rumoroso/a",        english: "noisy" },
+  { type: "adjective", word: "silenzioso/a",      english: "quiet / silent" },
+  { type: "adjective", word: "luminoso/a",        english: "bright / well-lit" },
+  { type: "adjective", word: "buio/a",            english: "dark" },
+  { type: "adjective", word: "buono/a",           english: "good" },
+  { type: "adjective", word: "cattivo/a",         english: "bad" },
+  { type: "adjective", word: "caro/a",            english: "expensive / dear" },
+  { type: "adjective", word: "economico/a",       english: "cheap / affordable" },
+  { type: "adjective", word: "simpatico/a",       english: "nice / likeable" },
+  { type: "adjective", word: "antipatico/a",      english: "unpleasant / unfriendly" },
+  { type: "adjective", word: "occupato/a",        english: "busy / occupied" },
+  { type: "adjective", word: "libero/a",          english: "free / available" },
+  { type: "adjective", word: "facile",            english: "easy" },
+  { type: "adjective", word: "difficile",         english: "difficult" }
+];
+
+const casa = [
+  { type: "noun", category: "casa", word: "il salotto",       english: "living room" },
+  { type: "noun", category: "casa", word: "la cucina",        english: "kitchen" },
+  { type: "noun", category: "casa", word: "la camera da letto", english: "bedroom" },
+  { type: "noun", category: "casa", word: "il bagno",         english: "bathroom" },
+  { type: "noun", category: "casa", word: "lo studio",        english: "study" },
+  { type: "noun", category: "casa", word: "l'ingresso",       english: "entrance hall" },
+  { type: "noun", category: "casa", word: "il corridoio",     english: "corridor / hallway" },
+  { type: "noun", category: "casa", word: "la cantina",       english: "cellar / basement" },
+  { type: "noun", category: "casa", word: "il garage",        english: "garage" },
+  { type: "noun", category: "casa", word: "il giardino",      english: "garden" },
+  { type: "noun", category: "casa", word: "il balcone",       english: "balcony" },
+  { type: "noun", category: "casa", word: "il terrazzo",      english: "terrace" },
+  { type: "noun", category: "casa", word: "le scale",         english: "stairs" },
+  { type: "noun", category: "casa", word: "il soffitto",      english: "ceiling" },
+  { type: "noun", category: "casa", word: "il pavimento",     english: "floor" },
+  { type: "noun", category: "casa", word: "la parete",        english: "wall (interior)" },
+  { type: "noun", category: "casa", word: "la finestra",      english: "window" },
+  { type: "noun", category: "casa", word: "la porta",         english: "door" },
+  { type: "noun", category: "casa", word: "il tetto",         english: "roof" },
+  { type: "noun", category: "casa", word: "l'ascensore",      english: "elevator / lift" }
+];
+
+const citta = [
+  { type: "noun", category: "citta", word: "la piazza",         english: "square / piazza" },
+  { type: "noun", category: "citta", word: "la via / la strada",english: "street / road" },
+  { type: "noun", category: "citta", word: "il corso",          english: "main street / avenue" },
+  { type: "noun", category: "citta", word: "il vicolo",         english: "alley / lane" },
+  { type: "noun", category: "citta", word: "il marciapiede",    english: "pavement / sidewalk" },
+  { type: "noun", category: "citta", word: "l'incrocio",        english: "crossroads / intersection" },
+  { type: "noun", category: "citta", word: "il semaforo",       english: "traffic light" },
+  { type: "noun", category: "citta", word: "il ponte",          english: "bridge" },
+  { type: "noun", category: "citta", word: "il parco",          english: "park" },
+  { type: "noun", category: "citta", word: "il palazzo",        english: "building / palace" },
+  { type: "noun", category: "citta", word: "la chiesa",         english: "church" },
+  { type: "noun", category: "citta", word: "il duomo",          english: "cathedral" },
+  { type: "noun", category: "citta", word: "il municipio",      english: "town hall" },
+  { type: "noun", category: "citta", word: "la fontana",        english: "fountain" },
+  { type: "noun", category: "citta", word: "il quartiere",      english: "neighbourhood / district" },
+  { type: "noun", category: "citta", word: "il centro storico", english: "historic city centre" },
+  { type: "noun", category: "citta", word: "la periferia",      english: "suburbs / outskirts" },
+  { type: "noun", category: "citta", word: "la stazione",       english: "station" },
+  { type: "noun", category: "citta", word: "l'aeroporto",       english: "airport" },
+  { type: "noun", category: "citta", word: "il porto",          english: "port / harbour" }
+];
+
+const trasporti = [
+  { type: "noun", category: "trasporti", word: "la macchina",      english: "car" },
+  { type: "noun", category: "trasporti", word: "il treno",         english: "train" },
+  { type: "noun", category: "trasporti", word: "l'autobus",        english: "bus" },
+  { type: "noun", category: "trasporti", word: "la metropolitana", english: "underground / metro" },
+  { type: "noun", category: "trasporti", word: "il tram",          english: "tram" },
+  { type: "noun", category: "trasporti", word: "il taxi",          english: "taxi" },
+  { type: "noun", category: "trasporti", word: "la bicicletta",    english: "bicycle" },
+  { type: "noun", category: "trasporti", word: "lo scooter",       english: "scooter" },
+  { type: "noun", category: "trasporti", word: "la moto",          english: "motorbike" },
+  { type: "noun", category: "trasporti", word: "l'aereo",          english: "plane" },
+  { type: "noun", category: "trasporti", word: "la nave",          english: "ship" },
+  { type: "noun", category: "trasporti", word: "il pullman",       english: "coach / long-distance bus" },
+  { type: "noun", category: "trasporti", word: "il traghetto",     english: "ferry" },
+  { type: "noun", category: "trasporti", word: "a piedi",          english: "on foot" },
+  { type: "noun", category: "trasporti", word: "in macchina",      english: "by car" }
+];
+
+const espressioni = [
+  { type: "expression", word: "Scusi, dov'è...?",             english: "Excuse me, where is...?" },
+  { type: "expression", word: "Come arrivo a...?",            english: "How do I get to...?" },
+  { type: "expression", word: "Giri a destra",                english: "Turn right" },
+  { type: "expression", word: "Giri a sinistra",              english: "Turn left" },
+  { type: "expression", word: "Vada dritto",                  english: "Go straight ahead" },
+  { type: "expression", word: "Prenda la prima a destra",     english: "Take the first right" },
+  { type: "expression", word: "È lontano?",                   english: "Is it far?" },
+  { type: "expression", word: "È vicino?",                    english: "Is it near?" },
+  { type: "expression", word: "A che ora apre/chiude?",       english: "What time does it open/close?" },
+  { type: "expression", word: "Quanto costa?",                english: "How much does it cost?" },
+  { type: "expression", word: "Mi può aiutare?",              english: "Can you help me?" },
+  { type: "expression", word: "Non capisco",                  english: "I don't understand" },
+  { type: "expression", word: "Parla inglese?",               english: "Do you speak English?" },
+  { type: "expression", word: "Può ripetere, per favore?",    english: "Can you repeat, please?" },
+  { type: "expression", word: "Grazie mille",                 english: "Thank you very much" }
+];
+
+const negozi = [
+  { type: "noun", category: "negozi", word: "il supermercato",   english: "supermarket" },
+  { type: "noun", category: "negozi", word: "il mercato",        english: "market" },
+  { type: "noun", category: "negozi", word: "la panetteria",     english: "bread shop / bakery" },
+  { type: "noun", category: "negozi", word: "la pasticceria",    english: "patisserie / cake shop" },
+  { type: "noun", category: "negozi", word: "la macelleria",     english: "butcher's" },
+  { type: "noun", category: "negozi", word: "la pescheria",      english: "fishmonger's" },
+  { type: "noun", category: "negozi", word: "la farmacia",       english: "pharmacy / chemist" },
+  { type: "noun", category: "negozi", word: "la banca",          english: "bank" },
+  { type: "noun", category: "negozi", word: "l'ufficio postale", english: "post office" },
+  { type: "noun", category: "negozi", word: "il ristorante",     english: "restaurant" },
+  { type: "noun", category: "negozi", word: "la pizzeria",       english: "pizzeria" },
+  { type: "noun", category: "negozi", word: "l'albergo",         english: "hotel" },
+  { type: "noun", category: "negozi", word: "il cinema",         english: "cinema" },
+  { type: "noun", category: "negozi", word: "il museo",          english: "museum" },
+  { type: "noun", category: "negozi", word: "la biblioteca",     english: "library" },
+  { type: "noun", category: "negozi", word: "la libreria",       english: "bookshop" },
+  { type: "noun", category: "negozi", word: "la tabaccheria",    english: "tobacconist's" },
+  { type: "noun", category: "negozi", word: "l'edicola",         english: "newsagent's / newsstand" },
+  { type: "noun", category: "negozi", word: "il parrucchiere",   english: "hairdresser" },
+  { type: "noun", category: "negozi", word: "la palestra",       english: "gym" },
+  { type: "noun", category: "negozi", word: "l'ospedale",        english: "hospital" }
+];
+
+const preposizioni = [
+  { type: "preposition", word: "a",           english: "at / to" },
+  { type: "preposition", word: "in",          english: "in / to (country/region)" },
+  { type: "preposition", word: "di",          english: "of / from" },
+  { type: "preposition", word: "da",          english: "from / since / by / at" },
+  { type: "preposition", word: "su",          english: "on / over / about" },
+  { type: "preposition", word: "per",         english: "for / through / in order to" },
+  { type: "preposition", word: "tra / fra",   english: "between / among / in (time)" },
+  { type: "preposition", word: "con",         english: "with" },
+  { type: "preposition", word: "senza",       english: "without" },
+  { type: "preposition", word: "davanti a",   english: "in front of" },
+  { type: "preposition", word: "dietro (a)",  english: "behind" },
+  { type: "preposition", word: "sopra",       english: "above / on top of" },
+  { type: "preposition", word: "sotto",       english: "below / under" },
+  { type: "preposition", word: "vicino a",    english: "near / next to" },
+  { type: "preposition", word: "lontano da",  english: "far from" },
+  { type: "preposition", word: "accanto a",   english: "next to / beside" },
+  { type: "preposition", word: "di fronte a", english: "opposite / facing" },
+  { type: "preposition", word: "a destra di", english: "to the right of" },
+  { type: "preposition", word: "a sinistra di", english: "to the left of" }
+];
+
+const alloggio = [
+  { type: "noun", category: "alloggio", word: "l'albergo",       english: "hotel" },
+  { type: "noun", category: "alloggio", word: "l'ostello",       english: "hostel" },
+  { type: "noun", category: "alloggio", word: "il B&B",          english: "bed & breakfast" },
+  { type: "noun", category: "alloggio", word: "la pensione",     english: "guesthouse / pension" },
+  { type: "noun", category: "alloggio", word: "l'appartamento",  english: "apartment / flat" },
+  { type: "noun", category: "alloggio", word: "il campeggio",    english: "campsite" },
+  { type: "noun", category: "alloggio", word: "l'agriturismo",   english: "farmhouse / rural B&B" },
+  { type: "noun", category: "alloggio", word: "il resort",       english: "resort" }
+];
+
+const hotel = [
+  { type: "noun", category: "hotel", word: "la reception",              english: "reception / front desk" },
+  { type: "noun", category: "hotel", word: "la prenotazione",           english: "reservation / booking" },
+  { type: "noun", category: "hotel", word: "il portiere",               english: "porter / concierge" },
+  { type: "noun", category: "hotel", word: "il parcheggio privato",     english: "private parking" },
+  { type: "noun", category: "hotel", word: "la colazione inclusa",      english: "breakfast included" },
+  { type: "noun", category: "hotel", word: "l'aria condizionata",       english: "air conditioning" },
+  { type: "noun", category: "hotel", word: "l'accesso disabili",        english: "disabled access" },
+  { type: "noun", category: "hotel", word: "la sala comune",            english: "common room" },
+  { type: "noun", category: "hotel", word: "il Wi-Fi",                  english: "Wi-Fi" },
+  { type: "noun", category: "hotel", word: "la camera singola",         english: "single room" },
+  { type: "noun", category: "hotel", word: "la camera doppia",          english: "twin room (two beds)" },
+  { type: "noun", category: "hotel", word: "la camera matrimoniale",    english: "double room (one bed)" },
+  { type: "noun", category: "hotel", word: "la camera tripla",          english: "triple room" },
+  { type: "noun", category: "hotel", word: "il dormitorio",             english: "dormitory" },
+  { type: "noun", category: "hotel", word: "il bagno privato",          english: "private bathroom" },
+  { type: "noun", category: "hotel", word: "il bagno in comune",        english: "shared bathroom" },
+  { type: "noun", category: "hotel", word: "la camera con vista",       english: "room with a view" },
+  { type: "noun", category: "hotel", word: "non fumatori",              english: "non-smoking" }
+];
+
+const mesi = [
+  { type: "noun", category: "mesi", word: "gennaio",   english: "January" },
+  { type: "noun", category: "mesi", word: "febbraio",  english: "February" },
+  { type: "noun", category: "mesi", word: "marzo",     english: "March" },
+  { type: "noun", category: "mesi", word: "aprile",    english: "April" },
+  { type: "noun", category: "mesi", word: "maggio",    english: "May" },
+  { type: "noun", category: "mesi", word: "giugno",    english: "June" },
+  { type: "noun", category: "mesi", word: "luglio",    english: "July" },
+  { type: "noun", category: "mesi", word: "agosto",    english: "August" },
+  { type: "noun", category: "mesi", word: "settembre", english: "September" },
+  { type: "noun", category: "mesi", word: "ottobre",   english: "October" },
+  { type: "noun", category: "mesi", word: "novembre",  english: "November" },
+  { type: "noun", category: "mesi", word: "dicembre",  english: "December" }
+];
+
+const oggetti = [
+  { type: "noun", category: "oggetti", word: "l'armadio",         english: "wardrobe" },
+  { type: "noun", category: "oggetti", word: "la lampada",        english: "lamp" },
+  { type: "noun", category: "oggetti", word: "la sedia",          english: "chair" },
+  { type: "noun", category: "oggetti", word: "il tavolo",         english: "table" },
+  { type: "noun", category: "oggetti", word: "il divano",         english: "sofa / couch" },
+  { type: "noun", category: "oggetti", word: "il letto singolo",  english: "single bed" },
+  { type: "noun", category: "oggetti", word: "il letto matrimoniale", english: "double bed" },
+  { type: "noun", category: "oggetti", word: "il letto a castello", english: "bunk bed" },
+  { type: "noun", category: "oggetti", word: "il cuscino",        english: "pillow" },
+  { type: "noun", category: "oggetti", word: "la coperta",        english: "blanket" },
+  { type: "noun", category: "oggetti", word: "l'asciugamano",     english: "towel" },
+  { type: "noun", category: "oggetti", word: "il phon",           english: "hairdryer" },
+  { type: "noun", category: "oggetti", word: "la saponetta",      english: "bar of soap" },
+  { type: "noun", category: "oggetti", word: "la carta igienica", english: "toilet paper" },
+  { type: "noun", category: "oggetti", word: "il frigorifero",    english: "fridge / refrigerator" },
+  { type: "noun", category: "oggetti", word: "il frigobar",       english: "mini-bar" },
+  { type: "noun", category: "oggetti", word: "il termosifone",    english: "radiator" },
+  { type: "noun", category: "oggetti", word: "la valigia",        english: "suitcase" },
+  { type: "noun", category: "oggetti", word: "lo zaino",          english: "backpack / rucksack" }
+];
+
+const stagioni = [
+  { type: "noun", category: "stagioni", word: "la primavera", english: "spring" },
+  { type: "noun", category: "stagioni", word: "l'estate",     english: "summer" },
+  { type: "noun", category: "stagioni", word: "l'autunno",    english: "autumn / fall" },
+  { type: "noun", category: "stagioni", word: "l'inverno",    english: "winter" }
+];
+
+const tempo = [
+  { type: "noun", category: "tempo", word: "ieri",             english: "yesterday" },
+  { type: "noun", category: "tempo", word: "oggi",             english: "today" },
+  { type: "noun", category: "tempo", word: "domani",           english: "tomorrow" },
+  { type: "noun", category: "tempo", word: "dopodomani",       english: "the day after tomorrow" },
+  { type: "noun", category: "tempo", word: "ieri l'altro",     english: "the day before yesterday" },
+  { type: "noun", category: "tempo", word: "stamattina",       english: "this morning" },
+  { type: "noun", category: "tempo", word: "oggi pomeriggio",  english: "this afternoon" },
+  { type: "noun", category: "tempo", word: "stasera",          english: "this evening / tonight" },
+  { type: "noun", category: "tempo", word: "stanotte",         english: "tonight (late) / last night" },
+  { type: "noun", category: "tempo", word: "questa settimana", english: "this week" },
+  { type: "noun", category: "tempo", word: "questo mese",      english: "this month" },
+  { type: "noun", category: "tempo", word: "quest'anno",       english: "this year" },
+  { type: "noun", category: "tempo", word: "la settimana scorsa", english: "last week" },
+  { type: "noun", category: "tempo", word: "il mese scorso",   english: "last month" },
+  { type: "noun", category: "tempo", word: "l'anno scorso",    english: "last year" },
+  { type: "noun", category: "tempo", word: "la settimana prossima", english: "next week" },
+  { type: "noun", category: "tempo", word: "il mese prossimo", english: "next month" },
+  { type: "noun", category: "tempo", word: "l'anno prossimo",  english: "next year" }
+];
+
+const pronouns = ["io","tu","lui/lei","noi","voi","loro"];
+
+const categories = {
+  verbi:       { data: verbi,       title: "Gli Verbi Irregolari" },
+  avverbi:     { data: avverbi,     title: "Gli Avverbi di Frequenza" },
+  aggettivi:   { data: aggettivi,   title: "Gli Aggettivi" },
+  casa:        { data: casa,        title: "La Casa" },
+  citta:       { data: citta,       title: "La Città" },
+  trasporti:   { data: trasporti,   title: "I Mezzi di Trasporto" },
+  espressioni: { data: espressioni, title: "Espressioni Utili" },
+  negozi:      { data: negozi,      title: "Negozi e Servizi" },
+  preposizioni:{ data: preposizioni,title: "Le Preposizioni" },
+  alloggio:    { data: alloggio,    title: "Tipi di Alloggio" },
+  hotel:       { data: hotel,       title: "In The Hotel" },
+  mesi:        { data: mesi,        title: "I Mesi" },
+  oggetti:     { data: oggetti,     title: "Oggetti di Casa" },
+  stagioni:    { data: stagioni,    title: "Le Stagioni" },
+  tempo:       { data: tempo,       title: "Indicatori di Tempo" },
+  all: {
+    data: [...verbi, ...avverbi, ...aggettivi, ...casa, ...citta, ...trasporti,
+            ...espressioni, ...negozi, ...preposizioni, ...alloggio, ...hotel,
+            ...mesi, ...oggetti, ...stagioni, ...tempo],
+    title: "Tutto"
+  }
+};
+
+const categoryLabels = {
+  casa:        "la casa",
+  citta:       "la città",
+  trasporti:   "i trasporti",
+  negozi:      "negozi e servizi",
+  alloggio:    "alloggio",
+  hotel:       "in the hotel",
+  mesi:        "i mesi",
+  oggetti:     "oggetti di casa",
+  stagioni:    "le stagioni",
+  tempo:       "indicatori di tempo"
+};
+
+let activeCategory = "all";
+let deck = [];
+let currentIndex = 0;
+
+/* ── Helpers ── */
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function setCategory(key) {
+  activeCategory = key;
+  document.querySelectorAll("#nav button").forEach(b => b.classList.remove("active"));
+  document.getElementById("nav-" + key).classList.add("active");
+  document.getElementById("title").textContent = categories[key].title;
+  restart();
+}
+
+function restart() {
+  deck = shuffle([...categories[activeCategory].data]);
+  currentIndex = 0;
+  document.getElementById("done").style.display = "none";
+  document.getElementById("card-area").style.display = "";
+  showCard();
+}
+
+function showCard() {
+  const card = document.getElementById("card");
+  card.classList.remove("flipped");
+
+  const item = deck[currentIndex];
+
+  /* Dynamic font size for long words/phrases */
+  const wordEl = document.getElementById("word-front");
+  wordEl.textContent = item.word;
+  if (item.word.length > 25) {
+    wordEl.style.fontSize = "1.5rem";
+  } else if (item.word.length > 15) {
+    wordEl.style.fontSize = "2rem";
+  } else {
+    wordEl.style.fontSize = "";
+  }
+
+  const backEl    = document.getElementById("card-back");
+  const conjEl    = document.getElementById("conjugation");
+  const exEl      = document.getElementById("example");
+  const catLabel  = document.getElementById("category-label");
+  const englishEl = document.getElementById("english");
+
+  /* Reset back face */
+  backEl.className = "card-face card-back";
+  conjEl.innerHTML = "";
+  conjEl.style.display = "none";
+  exEl.innerHTML = "";
+  exEl.style.display = "none";
+
+  englishEl.textContent = item.english;
+
+  if (item.type === "verb") {
+    backEl.classList.add("verb-back");
+    catLabel.textContent = "verbo irregolare";
+    conjEl.style.display = "";
+    for (let i = 0; i < 6; i++) {
+      const row = document.createElement("div");
+      row.className = "row";
+      row.innerHTML = `<span class="pronoun">${pronouns[i]}</span><span class="form">${item.conjugation[i]}</span>`;
+      conjEl.appendChild(row);
+    }
+  } else if (item.type === "adverb") {
+    backEl.classList.add("adverb-back");
+    catLabel.textContent = "avverbio di frequenza";
+    exEl.style.display = "";
+    exEl.innerHTML = item.example;
+  } else if (item.type === "adjective") {
+    backEl.classList.add("adjective-back");
+    catLabel.textContent = "aggettivo";
+  } else if (item.type === "noun") {
+    backEl.classList.add(`${item.category}-back`);
+    catLabel.textContent = categoryLabels[item.category] || item.category;
+  } else if (item.type === "expression") {
+    backEl.classList.add("espressioni-back");
+    catLabel.textContent = "espressione utile";
+  } else if (item.type === "preposition") {
+    backEl.classList.add("preposizioni-back");
+    catLabel.textContent = "preposizione";
+  }
+
+  document.getElementById("progress").textContent = `${currentIndex + 1} / ${deck.length}`;
+  document.getElementById("next-btn").textContent = currentIndex < deck.length - 1 ? "Next →" : "Finish";
+}
+
+function flipCard() {
+  document.getElementById("card").classList.toggle("flipped");
+}
+
+function nextCard() {
+  if (currentIndex < deck.length - 1) {
+    currentIndex++;
+    showCard();
+  } else {
+    document.getElementById("card-area").style.display = "none";
+    document.getElementById("done").style.display = "";
+    document.getElementById("done-text").textContent =
+      `You've reviewed all ${deck.length} card${deck.length === 1 ? "" : "s"}.`;
+    document.getElementById("progress").textContent = "";
+  }
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === " " || e.key === "Enter") {
+    e.preventDefault();
+    flipCard();
+  } else if (e.key === "ArrowRight") {
+    nextCard();
+  }
+});
+
+/* Start with "Tutto" selected */
+setCategory("all");
+</script>
+
+</body>
+</html>
