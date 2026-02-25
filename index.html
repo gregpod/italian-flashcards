@@ -234,6 +234,36 @@
     border: 1px solid #461a60;
   }
 
+  /* ── Domande back ── */
+  .card-back.domande-back {
+    background: linear-gradient(135deg, #2e0a0a, #3e1010);
+    border: 1px solid #6e2020;
+  }
+
+  /* ── Saluti back ── */
+  .card-back.saluti-back {
+    background: linear-gradient(135deg, #2a1a04, #3a2808);
+    border: 1px solid #6a5010;
+  }
+
+  /* ── Animali back ── */
+  .card-back.animali-back {
+    background: linear-gradient(135deg, #0a1e10, #102818);
+    border: 1px solid #1a5030;
+  }
+
+  /* ── Cibo back ── */
+  .card-back.cibo-back {
+    background: linear-gradient(135deg, #2e1006, #3e1a08);
+    border: 1px solid #6e3010;
+  }
+
+  /* ── Varie back ── */
+  .card-back.varie-back {
+    background: linear-gradient(135deg, #0c1a2e, #12243e);
+    border: 1px solid #1e3a5e;
+  }
+
   /* ── English text colors ── */
   .card-back .english {
     font-size: 1.5rem;
@@ -256,6 +286,11 @@
   .card-back.oggetti-back .english     { color: #70e8d0; }
   .card-back.stagioni-back .english    { color: #80f060; }
   .card-back.tempo-back .english       { color: #d070f0; }
+  .card-back.domande-back .english     { color: #ff8c8c; }
+  .card-back.saluti-back .english      { color: #f0d080; }
+  .card-back.animali-back .english     { color: #80e8a0; }
+  .card-back.cibo-back .english        { color: #f0a060; }
+  .card-back.varie-back .english       { color: #90c8f0; }
 
   .card-back .example {
     font-size: 1rem;
@@ -455,18 +490,22 @@
     /* ── Nav becomes a slide-in drawer ── */
     nav {
       position: fixed;
-      top: 0; left: 0; bottom: 0;
+      top: 0; left: 0;
       width: min(290px, 84vw);
+      height: 100vh;           /* explicit height so overflow-y can engage */
       max-width: none;
       background: #12122a;
       border-right: 1px solid #2a2a4a;
       z-index: 100;
       flex-direction: column;
       align-items: stretch;
+      flex-wrap: nowrap;       /* prevent wrapping so scroll kicks in */
       gap: 0;
       margin: 0;
       padding: 0;
+      overflow-x: hidden;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch; /* smooth momentum on iOS */
       transform: translateX(-105%);
       transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -530,21 +569,21 @@
     /* ── Card optimised for mobile ── */
     .card-container {
       width: 100%;
-      height: 250px;
+      height: 320px;
       margin-bottom: 16px;
     }
 
-    .card-face { padding: 22px 20px; }
+    .card-face { padding: 28px 24px; }
 
-    .card-front .word { font-size: 2.2rem; }
+    .card-front .word { font-size: 2.6rem; }
 
     .card-back .english {
-      font-size: 1.25rem;
-      margin-bottom: 12px;
+      font-size: 1.4rem;
+      margin-bottom: 14px;
     }
 
-    .conjugation-table .row { font-size: 0.82rem; }
-    .conjugation-table { max-width: 260px; }
+    .conjugation-table .row { font-size: 0.88rem; }
+    .conjugation-table { max-width: 280px; }
 
     /* ── Controls ── */
     .controls { width: 100%; gap: 10px; }
@@ -601,6 +640,11 @@
   <button onclick="setCategory('oggetti')"    id="nav-oggetti">Oggetti di Casa</button>
   <button onclick="setCategory('stagioni')"   id="nav-stagioni">Le Stagioni</button>
   <button onclick="setCategory('tempo')"      id="nav-tempo">Indicatori di Tempo</button>
+  <button onclick="setCategory('domande')"    id="nav-domande">Parole Interrogative</button>
+  <button onclick="setCategory('saluti')"     id="nav-saluti">Saluti e Cortesia</button>
+  <button onclick="setCategory('animali')"    id="nav-animali">Gli Animali</button>
+  <button onclick="setCategory('cibo')"       id="nav-cibo">Il Cibo</button>
+  <button onclick="setCategory('varie')"      id="nav-varie">Varie</button>
   <button onclick="setCategory('all')"        id="nav-all">Tutto</button>
 </nav>
 
@@ -653,7 +697,10 @@ const verbi = [
   { type: "verb", word: "scegliere",english: "to choose",         conjugation: ["scelgo","scegli","sceglie","scegliamo","scegliete","scelgono"] },
   { type: "verb", word: "stare",    english: "to stay / to be",   conjugation: ["sto","stai","sta","stiamo","state","stanno"] },
   { type: "verb", word: "uscire",   english: "to go out",         conjugation: ["esco","esci","esce","usciamo","uscite","escono"] },
-  { type: "verb", word: "venire",   english: "to come",           conjugation: ["vengo","vieni","viene","veniamo","venite","vengono"] }
+  { type: "verb", word: "venire",   english: "to come",           conjugation: ["vengo","vieni","viene","veniamo","venite","vengono"] },
+  { type: "verb", word: "dovere",   english: "to have to / must", conjugation: ["devo","devi","deve","dobbiamo","dovete","devono"] },
+  { type: "verb", word: "potere",   english: "to be able to / can", conjugation: ["posso","puoi","può","possiamo","potete","possono"] },
+  { type: "verb", word: "volere",   english: "to want",           conjugation: ["voglio","vuoi","vuole","vogliamo","volete","vogliono"] }
 ];
 
 const avverbi = [
@@ -751,7 +798,11 @@ const casa = [
   { type: "noun", category: "casa", word: "la finestra",      english: "window" },
   { type: "noun", category: "casa", word: "la porta",         english: "door" },
   { type: "noun", category: "casa", word: "il tetto",         english: "roof" },
-  { type: "noun", category: "casa", word: "l'ascensore",      english: "elevator / lift" }
+  { type: "noun", category: "casa", word: "l'ascensore",      english: "elevator / lift" },
+  { type: "noun", category: "casa", word: "la camera",        english: "room" },
+  { type: "noun", category: "casa", word: "il portone",       english: "main entrance door" },
+  { type: "noun", category: "casa", word: "la doccia",        english: "shower" },
+  { type: "noun", category: "casa", word: "il lavandino",     english: "sink / basin" }
 ];
 
 const citta = [
@@ -774,7 +825,8 @@ const citta = [
   { type: "noun", category: "citta", word: "la periferia",      english: "suburbs / outskirts" },
   { type: "noun", category: "citta", word: "la stazione",       english: "station" },
   { type: "noun", category: "citta", word: "l'aeroporto",       english: "airport" },
-  { type: "noun", category: "citta", word: "il porto",          english: "port / harbour" }
+  { type: "noun", category: "citta", word: "il porto",          english: "port / harbour" },
+  { type: "noun", category: "citta", word: "lo stadio",         english: "stadium" }
 ];
 
 const trasporti = [
@@ -790,9 +842,69 @@ const trasporti = [
   { type: "noun", category: "trasporti", word: "l'aereo",          english: "plane" },
   { type: "noun", category: "trasporti", word: "la nave",          english: "ship" },
   { type: "noun", category: "trasporti", word: "il pullman",       english: "coach / long-distance bus" },
-  { type: "noun", category: "trasporti", word: "il traghetto",     english: "ferry" },
-  { type: "noun", category: "trasporti", word: "a piedi",          english: "on foot" },
-  { type: "noun", category: "trasporti", word: "in macchina",      english: "by car" }
+  { type: "noun", category: "trasporti", word: "il traghetto",          english: "ferry" },
+  { type: "noun", category: "trasporti", word: "la corriera",           english: "regional coach / inter-city bus" },
+  { type: "noun", category: "trasporti", word: "la nave da crociera",   english: "cruise ship" },
+  { type: "noun", category: "trasporti", word: "il motorino",           english: "moped" },
+  { type: "noun", category: "trasporti", word: "la Vespa",              english: "Vespa scooter" },
+  { type: "noun", category: "trasporti", word: "a piedi",               english: "on foot" },
+  { type: "noun", category: "trasporti", word: "in macchina",           english: "by car" }
+];
+
+const domande = [
+  { type: "noun", category: "domande", word: "come",           english: "how" },
+  { type: "noun", category: "domande", word: "dove",           english: "where" },
+  { type: "noun", category: "domande", word: "quando",         english: "when" },
+  { type: "noun", category: "domande", word: "chi",            english: "who" },
+  { type: "noun", category: "domande", word: "perché",         english: "why / because" },
+  { type: "noun", category: "domande", word: "che cosa / cosa",english: "what" },
+  { type: "noun", category: "domande", word: "che",            english: "what / which" },
+  { type: "noun", category: "domande", word: "quale / quali",  english: "which / what (+ noun)" }
+];
+
+const saluti = [
+  { type: "noun", category: "saluti", word: "Buongiorno",       english: "Good morning / good day" },
+  { type: "noun", category: "saluti", word: "Buon pomeriggio",  english: "Good afternoon" },
+  { type: "noun", category: "saluti", word: "Buonasera",        english: "Good evening" },
+  { type: "noun", category: "saluti", word: "Buonanotte",       english: "Good night" },
+  { type: "noun", category: "saluti", word: "Arrivederci",      english: "Goodbye" },
+  { type: "noun", category: "saluti", word: "ArrivederLa",      english: "Goodbye (formal)" },
+  { type: "noun", category: "saluti", word: "A presto",         english: "See you soon" },
+  { type: "noun", category: "saluti", word: "A dopo",           english: "See you later" },
+  { type: "noun", category: "saluti", word: "A domani",         english: "See you tomorrow" },
+  { type: "noun", category: "saluti", word: "Buona giornata",   english: "Have a good day" },
+  { type: "noun", category: "saluti", word: "Buona serata",     english: "Have a good evening" },
+  { type: "noun", category: "saluti", word: "Ci vediamo!",      english: "See you around!" },
+  { type: "noun", category: "saluti", word: "Grazie",           english: "Thank you" },
+  { type: "noun", category: "saluti", word: "Prego",            english: "You're welcome" },
+  { type: "noun", category: "saluti", word: "Altrettanto",      english: "Same to you" },
+  { type: "noun", category: "saluti", word: "Di niente",        english: "Don't mention it" },
+  { type: "noun", category: "saluti", word: "Non c'è di che",   english: "Not at all / No reason to thank me" },
+  { type: "noun", category: "saluti", word: "Si figuri!",       english: "Don't even think about it! (formal)" },
+  { type: "noun", category: "saluti", word: "Grazie a Lei",     english: "Thank you (to you, formal)" },
+  { type: "noun", category: "saluti", word: "Grazie mille",     english: "Thanks a million / many thanks" }
+];
+
+const animali = [
+  { type: "noun", category: "animali", word: "il cane",         english: "dog" },
+  { type: "noun", category: "animali", word: "il gatto",        english: "cat" },
+  { type: "noun", category: "animali", word: "la zanzara",      english: "mosquito" }
+];
+
+const cibo = [
+  { type: "noun", category: "cibo", word: "lo yogurt",          english: "yoghurt" },
+  { type: "noun", category: "cibo", word: "il panino",          english: "sandwich / bread roll" },
+  { type: "noun", category: "cibo", word: "l'arancia",          english: "orange (fruit)" },
+  { type: "noun", category: "cibo", word: "l'insalata",         english: "salad" }
+];
+
+const varie = [
+  { type: "noun", category: "varie", word: "il ragazzo",        english: "boy / young man" },
+  { type: "noun", category: "varie", word: "la ragazza",        english: "girl / young woman" },
+  { type: "noun", category: "varie", word: "lo straniero",      english: "foreigner" },
+  { type: "noun", category: "varie", word: "l'artista",         english: "artist" },
+  { type: "noun", category: "varie", word: "la storia",         english: "history / story" },
+  { type: "noun", category: "varie", word: "il canale",         english: "channel / canal" }
 ];
 
 const espressioni = [
@@ -925,7 +1037,13 @@ const oggetti = [
   { type: "noun", category: "oggetti", word: "il frigobar",       english: "mini-bar" },
   { type: "noun", category: "oggetti", word: "il termosifone",    english: "radiator" },
   { type: "noun", category: "oggetti", word: "la valigia",        english: "suitcase" },
-  { type: "noun", category: "oggetti", word: "lo zaino",          english: "backpack / rucksack" }
+  { type: "noun", category: "oggetti", word: "lo zaino",          english: "backpack / rucksack" },
+  { type: "noun", category: "oggetti", word: "il forno",          english: "oven" },
+  { type: "noun", category: "oggetti", word: "il forno a microonde", english: "microwave oven" },
+  { type: "noun", category: "oggetti", word: "il fornello",       english: "stove / hob" },
+  { type: "noun", category: "oggetti", word: "le lenzuola",       english: "sheets (bed)" },
+  { type: "noun", category: "oggetti", word: "lo sgabello",       english: "stool" },
+  { type: "noun", category: "oggetti", word: "il computer",       english: "computer" }
 ];
 
 const stagioni = [
@@ -974,10 +1092,16 @@ const categories = {
   oggetti:     { data: oggetti,     title: "Oggetti di Casa" },
   stagioni:    { data: stagioni,    title: "Le Stagioni" },
   tempo:       { data: tempo,       title: "Indicatori di Tempo" },
+  domande:     { data: domande,     title: "Parole Interrogative" },
+  saluti:      { data: saluti,      title: "Saluti e Cortesia" },
+  animali:     { data: animali,     title: "Gli Animali" },
+  cibo:        { data: cibo,        title: "Il Cibo" },
+  varie:       { data: varie,       title: "Varie" },
   all: {
     data: [...verbi, ...avverbi, ...aggettivi, ...casa, ...citta, ...trasporti,
             ...espressioni, ...negozi, ...preposizioni, ...alloggio, ...hotel,
-            ...mesi, ...oggetti, ...stagioni, ...tempo],
+            ...mesi, ...oggetti, ...stagioni, ...tempo, ...domande,
+            ...saluti, ...animali, ...cibo, ...varie],
     title: "Tutto"
   }
 };
@@ -992,7 +1116,12 @@ const categoryLabels = {
   mesi:        "i mesi",
   oggetti:     "oggetti di casa",
   stagioni:    "le stagioni",
-  tempo:       "indicatori di tempo"
+  tempo:       "indicatori di tempo",
+  domande:     "parole interrogative",
+  saluti:      "saluti e cortesia",
+  animali:     "gli animali",
+  cibo:        "il cibo",
+  varie:       "varie"
 };
 
 let activeCategory = "all";
