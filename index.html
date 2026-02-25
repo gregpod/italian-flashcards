@@ -121,6 +121,9 @@
     color: #fff;
     text-align: center;
     line-height: 1.2;
+    width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
 
   .card-front .category-label {
@@ -568,12 +571,14 @@
 
     /* ── Card optimised for mobile ── */
     .card-container {
-      width: 100%;
+      width: 100vw;
+      margin-left: -12px;
+      border-radius: 16px;
       height: 320px;
       margin-bottom: 16px;
     }
 
-    .card-face { padding: 28px 24px; }
+    .card-face { padding: 32px 28px; }
 
     .card-front .word { font-size: 2.6rem; }
 
@@ -1182,10 +1187,12 @@ function showCard() {
   /* Dynamic font size for long words/phrases */
   const wordEl = document.getElementById("word-front");
   wordEl.textContent = item.word;
-  if (item.word.length > 25) {
-    wordEl.style.fontSize = "1.5rem";
-  } else if (item.word.length > 15) {
+  if (item.word.length > 22) {
+    wordEl.style.fontSize = "1.4rem";
+  } else if (item.word.length > 14) {
     wordEl.style.fontSize = "2rem";
+  } else if (item.word.length > 10) {
+    wordEl.style.fontSize = "2.5rem";
   } else {
     wordEl.style.fontSize = "";
   }
