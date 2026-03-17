@@ -340,6 +340,30 @@
     flex: 1;
   }
 
+  .past-participle {
+    margin-top: 12px;
+    font-size: 0.8rem;
+    color: #556;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+
+  .past-participle .pp-label {
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    color: #445;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .past-participle .pp-form {
+    color: #9fc;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-style: italic;
+  }
+
   /* ── Controls ── */
   .controls {
     display: flex;
@@ -668,6 +692,7 @@
         <div class="card-face card-back" id="card-back">
           <div class="english" id="english"></div>
           <div class="conjugation-table" id="conjugation"></div>
+          <div class="past-participle" id="past-participle"></div>
           <div class="example" id="example"></div>
         </div>
       </div>
@@ -691,21 +716,21 @@
 <script>
 /* ── Data ── */
 const verbi = [
-  { type: "verb", word: "andare",   english: "to go",             conjugation: ["vado","vai","va","andiamo","andate","vanno"] },
-  { type: "verb", word: "avere",    english: "to have",           conjugation: ["ho","hai","ha","abbiamo","avete","hanno"] },
-  { type: "verb", word: "bere",     english: "to drink",          conjugation: ["bevo","bevi","beve","beviamo","bevete","bevono"] },
-  { type: "verb", word: "dare",     english: "to give",           conjugation: ["do","dai","dà","diamo","date","danno"] },
-  { type: "verb", word: "dire",     english: "to say / to tell",  conjugation: ["dico","dici","dice","diciamo","dite","dicono"] },
-  { type: "verb", word: "essere",   english: "to be",             conjugation: ["sono","sei","è","siamo","siete","sono"] },
-  { type: "verb", word: "fare",     english: "to do / to make",   conjugation: ["faccio","fai","fa","facciamo","fate","fanno"] },
-  { type: "verb", word: "rimanere", english: "to remain / to stay", conjugation: ["rimango","rimani","rimane","rimaniamo","rimanete","rimangono"] },
-  { type: "verb", word: "scegliere",english: "to choose",         conjugation: ["scelgo","scegli","sceglie","scegliamo","scegliete","scelgono"] },
-  { type: "verb", word: "stare",    english: "to stay / to be",   conjugation: ["sto","stai","sta","stiamo","state","stanno"] },
-  { type: "verb", word: "uscire",   english: "to go out",         conjugation: ["esco","esci","esce","usciamo","uscite","escono"] },
-  { type: "verb", word: "venire",   english: "to come",           conjugation: ["vengo","vieni","viene","veniamo","venite","vengono"] },
-  { type: "verb", word: "dovere",   english: "to have to / must", conjugation: ["devo","devi","deve","dobbiamo","dovete","devono"] },
-  { type: "verb", word: "potere",   english: "to be able to / can", conjugation: ["posso","puoi","può","possiamo","potete","possono"] },
-  { type: "verb", word: "volere",   english: "to want",           conjugation: ["voglio","vuoi","vuole","vogliamo","volete","vogliono"] }
+  { type: "verb", word: "andare",   english: "to go",             pastParticiple: "andato",   conjugation: ["vado","vai","va","andiamo","andate","vanno"] },
+  { type: "verb", word: "avere",    english: "to have",           pastParticiple: "avuto",    conjugation: ["ho","hai","ha","abbiamo","avete","hanno"] },
+  { type: "verb", word: "bere",     english: "to drink",          pastParticiple: "bevuto",   conjugation: ["bevo","bevi","beve","beviamo","bevete","bevono"] },
+  { type: "verb", word: "dare",     english: "to give",           pastParticiple: "dato",     conjugation: ["do","dai","dà","diamo","date","danno"] },
+  { type: "verb", word: "dire",     english: "to say / to tell",  pastParticiple: "detto",    conjugation: ["dico","dici","dice","diciamo","dite","dicono"] },
+  { type: "verb", word: "essere",   english: "to be",             pastParticiple: "stato",    conjugation: ["sono","sei","è","siamo","siete","sono"] },
+  { type: "verb", word: "fare",     english: "to do / to make",   pastParticiple: "fatto",    conjugation: ["faccio","fai","fa","facciamo","fate","fanno"] },
+  { type: "verb", word: "rimanere", english: "to remain / to stay", pastParticiple: "rimasto", conjugation: ["rimango","rimani","rimane","rimaniamo","rimanete","rimangono"] },
+  { type: "verb", word: "scegliere",english: "to choose",         pastParticiple: "scelto",   conjugation: ["scelgo","scegli","sceglie","scegliamo","scegliete","scelgono"] },
+  { type: "verb", word: "stare",    english: "to stay / to be",   pastParticiple: "stato",    conjugation: ["sto","stai","sta","stiamo","state","stanno"] },
+  { type: "verb", word: "uscire",   english: "to go out",         pastParticiple: "uscito",   conjugation: ["esco","esci","esce","usciamo","uscite","escono"] },
+  { type: "verb", word: "venire",   english: "to come",           pastParticiple: "venuto",   conjugation: ["vengo","vieni","viene","veniamo","venite","vengono"] },
+  { type: "verb", word: "dovere",   english: "to have to / must", pastParticiple: "dovuto",   conjugation: ["devo","devi","deve","dobbiamo","dovete","devono"] },
+  { type: "verb", word: "potere",   english: "to be able to / can", pastParticiple: "potuto", conjugation: ["posso","puoi","può","possiamo","potete","possono"] },
+  { type: "verb", word: "volere",   english: "to want",           pastParticiple: "voluto",   conjugation: ["voglio","vuoi","vuole","vogliamo","volete","vogliono"] }
 ];
 
 const avverbi = [
@@ -1199,6 +1224,7 @@ function showCard() {
 
   const backEl    = document.getElementById("card-back");
   const conjEl    = document.getElementById("conjugation");
+  const ppEl      = document.getElementById("past-participle");
   const exEl      = document.getElementById("example");
   const catLabel  = document.getElementById("category-label");
   const englishEl = document.getElementById("english");
@@ -1207,6 +1233,8 @@ function showCard() {
   backEl.className = "card-face card-back";
   conjEl.innerHTML = "";
   conjEl.style.display = "none";
+  ppEl.innerHTML = "";
+  ppEl.style.display = "none";
   exEl.innerHTML = "";
   exEl.style.display = "none";
 
@@ -1222,6 +1250,8 @@ function showCard() {
       row.innerHTML = `<span class="pronoun">${pronouns[i]}</span><span class="form">${item.conjugation[i]}</span>`;
       conjEl.appendChild(row);
     }
+    ppEl.style.display = "";
+    ppEl.innerHTML = `<span class="pp-label">participio passato</span><span class="pp-form">${item.pastParticiple}</span>`;
   } else if (item.type === "adverb") {
     backEl.classList.add("adverb-back");
     catLabel.textContent = "avverbio di frequenza";
