@@ -31,7 +31,7 @@
 
   nav button {
     background: transparent;
-    color: #667;
+    color: #a0a0be;
     border: 1px solid #2a2a4a;
     border-radius: 20px;
     padding: 8px 18px;
@@ -41,8 +41,8 @@
   }
 
   nav button:hover {
-    color: #aaa;
-    border-color: #445;
+    color: #d4d4e8;
+    border-color: #556;
     background: rgba(255,255,255,0.03);
   }
 
@@ -237,6 +237,46 @@
     border: 1px solid #461a60;
   }
 
+  /* ── Participi back ── */
+  .card-back.participi-back {
+    background: linear-gradient(135deg, #1e0a38, #2c1050);
+    border: 1px solid #5a2080;
+  }
+
+  .card-back.participi-back .english     { color: #d4a0ff; }
+
+  /* ── Past participle note on verb cards ── */
+  .past-participle-note {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 1rem;
+    color: #a0e8d8;
+  }
+
+  .past-participle-note .pp-label {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #4a7a6a;
+    margin-bottom: 3px;
+  }
+
+  /* ── Auxiliary badge on participi cards ── */
+  .auxiliary-badge {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  .auxiliary-badge.avere  { background: rgba(90,32,128,0.5); color: #c090f0; border: 1px solid #7040a0; }
+  .auxiliary-badge.essere { background: rgba(30,60,120,0.5); color: #90b8f0; border: 1px solid #3060a0; }
+  .auxiliary-badge.both   { background: rgba(60,60,60,0.5);  color: #c0c0c0; border: 1px solid #606060; }
+
   /* ── Domande back ── */
   .card-back.domande-back {
     background: linear-gradient(135deg, #2e0a0a, #3e1010);
@@ -267,6 +307,47 @@
     border: 1px solid #1e3a5e;
   }
 
+  /* ── Qualsiasi back ── */
+  .card-back.qualsiasi-back {
+    background: linear-gradient(135deg, #1e0a2e, #2c1040);
+    border: 1px solid #5a2080;
+  }
+
+  /* ── Regole back ── */
+  .card-back.regole-back {
+    background: linear-gradient(135deg, #1e180a, #2c2210);
+    border: 1px solid #5a4a10;
+  }
+
+  .card-back.regole-back .english { color: #f0d080; }
+
+  .card-back.regole-back .example {
+    color: #c8c0a0;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    text-align: left;
+    max-width: 340px;
+  }
+
+  .card-back.regole-back .rule-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 2px;
+  }
+
+  .card-back.regole-back .rule-key {
+    color: #f0d080;
+    font-weight: 600;
+    min-width: 100px;
+    flex-shrink: 0;
+  }
+
+  .card-back.regole-back .rule-eg {
+    color: #a0b8d0;
+    font-style: italic;
+    font-size: 0.82rem;
+  }
+
   /* ── English text colors ── */
   .card-back .english {
     font-size: 1.5rem;
@@ -294,6 +375,7 @@
   .card-back.animali-back .english     { color: #80e8a0; }
   .card-back.cibo-back .english        { color: #f0a060; }
   .card-back.varie-back .english       { color: #90c8f0; }
+  .card-back.qualsiasi-back .english   { color: #d0a0f8; }
 
   .card-back .example {
     font-size: 1rem;
@@ -577,13 +659,13 @@
       text-align: left;
       padding: 15px 20px;
       font-size: 0.95rem;
-      color: #778;
+      color: #a8a8c4;
       background: transparent;
     }
 
     nav button:hover {
       background: rgba(255,255,255,0.04);
-      color: #bbb;
+      color: #d4d4e8;
     }
 
     nav button.active {
@@ -655,6 +737,8 @@
   </div>
 
   <button onclick="setCategory('verbi')"      id="nav-verbi">Gli Verbi Irregolari</button>
+  <button onclick="setCategory('participi')"  id="nav-participi">Participi Passati</button>
+  <button onclick="setCategory('regole')"     id="nav-regole">Grammar Rules</button>
   <button onclick="setCategory('avverbi')"    id="nav-avverbi">Gli Avverbi di Frequenza</button>
   <button onclick="setCategory('aggettivi')"  id="nav-aggettivi">Gli Aggettivi</button>
   <button onclick="setCategory('casa')"       id="nav-casa">La Casa</button>
@@ -674,6 +758,7 @@
   <button onclick="setCategory('animali')"    id="nav-animali">Gli Animali</button>
   <button onclick="setCategory('cibo')"       id="nav-cibo">Il Cibo</button>
   <button onclick="setCategory('varie')"      id="nav-varie">Varie</button>
+  <button onclick="setCategory('qualsiasi')" id="nav-qualsiasi">Indefiniti (Any-)</button>
   <button onclick="setCategory('all')"        id="nav-all">Tutto</button>
 </nav>
 
@@ -691,9 +776,10 @@
         </div>
         <div class="card-face card-back" id="card-back">
           <div class="english" id="english"></div>
+          <div id="auxiliary-badge"></div>
           <div class="conjugation-table" id="conjugation"></div>
-          <div class="past-participle" id="past-participle"></div>
           <div class="example" id="example"></div>
+          <div class="past-participle-note" id="past-participle-note"></div>
         </div>
       </div>
     </div>
@@ -716,21 +802,21 @@
 <script>
 /* ── Data ── */
 const verbi = [
-  { type: "verb", word: "andare",   english: "to go",             pastParticiple: "andato",   conjugation: ["vado","vai","va","andiamo","andate","vanno"] },
-  { type: "verb", word: "avere",    english: "to have",           pastParticiple: "avuto",    conjugation: ["ho","hai","ha","abbiamo","avete","hanno"] },
-  { type: "verb", word: "bere",     english: "to drink",          pastParticiple: "bevuto",   conjugation: ["bevo","bevi","beve","beviamo","bevete","bevono"] },
-  { type: "verb", word: "dare",     english: "to give",           pastParticiple: "dato",     conjugation: ["do","dai","dà","diamo","date","danno"] },
-  { type: "verb", word: "dire",     english: "to say / to tell",  pastParticiple: "detto",    conjugation: ["dico","dici","dice","diciamo","dite","dicono"] },
-  { type: "verb", word: "essere",   english: "to be",             pastParticiple: "stato",    conjugation: ["sono","sei","è","siamo","siete","sono"] },
-  { type: "verb", word: "fare",     english: "to do / to make",   pastParticiple: "fatto",    conjugation: ["faccio","fai","fa","facciamo","fate","fanno"] },
-  { type: "verb", word: "rimanere", english: "to remain / to stay", pastParticiple: "rimasto", conjugation: ["rimango","rimani","rimane","rimaniamo","rimanete","rimangono"] },
-  { type: "verb", word: "scegliere",english: "to choose",         pastParticiple: "scelto",   conjugation: ["scelgo","scegli","sceglie","scegliamo","scegliete","scelgono"] },
-  { type: "verb", word: "stare",    english: "to stay / to be",   pastParticiple: "stato",    conjugation: ["sto","stai","sta","stiamo","state","stanno"] },
-  { type: "verb", word: "uscire",   english: "to go out",         pastParticiple: "uscito",   conjugation: ["esco","esci","esce","usciamo","uscite","escono"] },
-  { type: "verb", word: "venire",   english: "to come",           pastParticiple: "venuto",   conjugation: ["vengo","vieni","viene","veniamo","venite","vengono"] },
-  { type: "verb", word: "dovere",   english: "to have to / must", pastParticiple: "dovuto",   conjugation: ["devo","devi","deve","dobbiamo","dovete","devono"] },
-  { type: "verb", word: "potere",   english: "to be able to / can", pastParticiple: "potuto", conjugation: ["posso","puoi","può","possiamo","potete","possono"] },
-  { type: "verb", word: "volere",   english: "to want",           pastParticiple: "voluto",   conjugation: ["voglio","vuoi","vuole","vogliamo","volete","vogliono"] }
+  { type: "verb", word: "andare",   english: "to go",               pastParticiple: "andato",   auxiliary: "essere",          conjugation: ["vado","vai","va","andiamo","andate","vanno"] },
+  { type: "verb", word: "avere",    english: "to have",             pastParticiple: "avuto",    auxiliary: "avere",           conjugation: ["ho","hai","ha","abbiamo","avete","hanno"] },
+  { type: "verb", word: "bere",     english: "to drink",            pastParticiple: "bevuto",   auxiliary: "avere",           conjugation: ["bevo","bevi","beve","beviamo","bevete","bevono"] },
+  { type: "verb", word: "dare",     english: "to give",             pastParticiple: "dato",     auxiliary: "avere",           conjugation: ["do","dai","dà","diamo","date","danno"] },
+  { type: "verb", word: "dire",     english: "to say / to tell",    pastParticiple: "detto",    auxiliary: "avere",           conjugation: ["dico","dici","dice","diciamo","dite","dicono"] },
+  { type: "verb", word: "essere",   english: "to be",               pastParticiple: "stato",    auxiliary: "essere",          conjugation: ["sono","sei","è","siamo","siete","sono"] },
+  { type: "verb", word: "fare",     english: "to do / to make",     pastParticiple: "fatto",    auxiliary: "avere",           conjugation: ["faccio","fai","fa","facciamo","fate","fanno"] },
+  { type: "verb", word: "rimanere", english: "to remain / to stay", pastParticiple: "rimasto",  auxiliary: "essere",          conjugation: ["rimango","rimani","rimane","rimaniamo","rimanete","rimangono"] },
+  { type: "verb", word: "scegliere",english: "to choose",           pastParticiple: "scelto",   auxiliary: "avere",           conjugation: ["scelgo","scegli","sceglie","scegliamo","scegliete","scelgono"] },
+  { type: "verb", word: "stare",    english: "to stay / to be",     pastParticiple: "stato",    auxiliary: "essere",          conjugation: ["sto","stai","sta","stiamo","state","stanno"] },
+  { type: "verb", word: "uscire",   english: "to go out",           pastParticiple: "uscito",   auxiliary: "essere",          conjugation: ["esco","esci","esce","usciamo","uscite","escono"] },
+  { type: "verb", word: "venire",   english: "to come",             pastParticiple: "venuto",   auxiliary: "essere",          conjugation: ["vengo","vieni","viene","veniamo","venite","vengono"] },
+  { type: "verb", word: "dovere",   english: "to have to / must",   pastParticiple: "dovuto",   auxiliary: "avere / essere",  conjugation: ["devo","devi","deve","dobbiamo","dovete","devono"] },
+  { type: "verb", word: "potere",   english: "to be able to / can", pastParticiple: "potuto",   auxiliary: "avere / essere",  conjugation: ["posso","puoi","può","possiamo","potete","possono"] },
+  { type: "verb", word: "volere",   english: "to want",             pastParticiple: "voluto",   auxiliary: "avere / essere",  conjugation: ["voglio","vuoi","vuole","vogliamo","volete","vogliono"] }
 ];
 
 const avverbi = [
@@ -738,7 +824,84 @@ const avverbi = [
   { type: "adverb", word: "di solito",    english: "usually",   example: "<em>Di solito vado al cinema il sabato.</em><span class='translation'>I usually go to the movies on Saturdays.</span>" },
   { type: "adverb", word: "spesso",       english: "often",     example: "<em>Spesso leggo prima di dormire.</em><span class='translation'>I often read before sleeping.</span>" },
   { type: "adverb", word: "qualche volta",english: "sometimes", example: "<em>Qualche volta cucino la cena.</em><span class='translation'>Sometimes I cook dinner.</span>" },
-  { type: "adverb", word: "mai",          english: "never",     example: "<em>Non bevo mai il caffè.</em><span class='translation'>I never drink coffee.</span>" }
+  { type: "adverb", word: "mai",          english: "never",     example: "<em>Non bevo mai il caffè.</em><span class='translation'>I never drink coffee.</span>" },
+  { type: "adverb", word: "appena",      english: "just",      example: "<em>Sono appena tornata a casa.</em><span class='translation'>I just got home.</span>" },
+  { type: "adverb", word: "già",         english: "already",   example: "<em>Abbiamo già fatto la spesa.</em><span class='translation'>We've already done the shopping.</span>" },
+  { type: "adverb", word: "ancora",      english: "yet / still", example: "<em>Non ho ancora letto quel libro.</em><span class='translation'>I haven't read that book yet.</span>" }
+];
+
+const participi = [
+  { type: "participle", word: "fare",      participle: "fatto",    auxiliary: "avere",          english: "to do / to make" },
+  { type: "participle", word: "dire",      participle: "detto",    auxiliary: "avere",          english: "to say" },
+  { type: "participle", word: "leggere",   participle: "letto",    auxiliary: "avere",          english: "to read" },
+  { type: "participle", word: "scrivere",  participle: "scritto",  auxiliary: "avere",          english: "to write" },
+  { type: "participle", word: "prendere",  participle: "preso",    auxiliary: "avere",          english: "to take" },
+  { type: "participle", word: "mettere",   participle: "messo",    auxiliary: "avere",          english: "to put" },
+  { type: "participle", word: "vedere",    participle: "visto",    auxiliary: "avere",          english: "to see" },
+  { type: "participle", word: "correre",   participle: "corso",    auxiliary: "avere / essere", english: "to run" },
+  { type: "participle", word: "venire",    participle: "venuto",   auxiliary: "essere",         english: "to come" },
+  { type: "participle", word: "rimanere",  participle: "rimasto",  auxiliary: "essere",         english: "to remain / to stay" },
+  { type: "participle", word: "essere",    participle: "stato",    auxiliary: "essere",         english: "to be" },
+  { type: "participle", word: "decidere",  participle: "deciso",   auxiliary: "avere",          english: "to decide" },
+  { type: "participle", word: "accendere", participle: "acceso",   auxiliary: "avere",          english: "to turn on" },
+  { type: "participle", word: "scendere",  participle: "sceso",    auxiliary: "essere / avere", english: "to descend / go down" },
+  { type: "participle", word: "esprimere", participle: "espresso", auxiliary: "avere",          english: "to express" },
+  { type: "participle", word: "muovere",   participle: "mosso",    auxiliary: "avere",          english: "to move (something)" },
+  { type: "participle", word: "rendere",   participle: "reso",     auxiliary: "avere",          english: "to give back / render" },
+  { type: "participle", word: "difendere", participle: "difeso",   auxiliary: "avere",          english: "to defend" }
+];
+
+const regole = [
+  {
+    type: "rule", word: "When to use ESSERE",
+    english: "Movement · staying · reflexive · life events",
+    detail: `<div class="rule-row"><span class="rule-key">movement:</span><span>Sono andato a Roma. <span class="rule-eg">(I went to Rome.)</span></span></div><div class="rule-row"><span class="rule-key">staying:</span><span>Sono rimasto a casa. <span class="rule-eg">(I stayed home.)</span></span></div><div class="rule-row"><span class="rule-key">reflexive:</span><span>Mi sono svegliata. <span class="rule-eg">(I woke up.)</span></span></div><div class="rule-row"><span class="rule-key">life events:</span><span>Sono nata in California. <span class="rule-eg">(I was born in CA.)</span></span></div>`
+  },
+  {
+    type: "rule", word: "When to use AVERE",
+    english: "Direct object · general activity · time spent",
+    detail: `<div class="rule-row"><span class="rule-key">direct obj:</span><span>Ho mangiato una mela. <span class="rule-eg">(I ate an apple.)</span></span></div><div class="rule-row"><span class="rule-key">activity:</span><span>Ho lavorato. Ho ballato. <span class="rule-eg">(I worked. I danced.)</span></span></div><div class="rule-row"><span class="rule-key">time spent:</span><span>Abbiamo passato l'estate. <span class="rule-eg">(We spent the summer.)</span></span></div>`
+  },
+  {
+    type: "rule", word: "Past participle agreement",
+    english: "ESSERE agrees · AVERE always -o",
+    detail: `<div class="rule-row"><span class="rule-key">with ESSERE:</span><span>matches subject gender/number</span></div><div class="rule-row"><span class="rule-key">masc. sg:</span><span>andato &nbsp; fem. sg: andata</span></div><div class="rule-row"><span class="rule-key">masc. pl:</span><span>andati &nbsp;&nbsp; fem. pl: andate</span></div><div class="rule-row" style="margin-top:6px"><span class="rule-key">with AVERE:</span><span>always -o, no change</span></div><div class="rule-row"><span class="rule-key"></span><span>Ho mangiato / ha mangiato / hanno mangiato</span></div>`
+  },
+  {
+    type: "rule", word: "How does piacere work?",
+    english: "The liked thing is the subject",
+    detail: `<div class="rule-row"><span class="rule-key">"I liked X"</span><span>= "X was pleasing to me"</span></div><div class="rule-row"><span class="rule-key">sing. thing:</span><span>Mi è piaciuto il film.</span></div><div class="rule-row"><span class="rule-key"></span><span>Mi è piaciuta la pizza.</span></div><div class="rule-row"><span class="rule-key">plur. thing:</span><span>Mi sono piaciuti i musei.</span></div><div class="rule-row"><span class="rule-key"></span><span>Mi sono piaciute le camere.</span></div>`
+  },
+  {
+    type: "rule", word: "iniziare / finire — essere or avere?",
+    english: "Depends on the subject",
+    detail: `<div class="rule-row"><span class="rule-key">inanimate:</span><span>→ ESSERE</span></div><div class="rule-row"><span class="rule-key"></span><span>Il film è iniziato. <span class="rule-eg">(The film started.)</span></span></div><div class="rule-row" style="margin-top:6px"><span class="rule-key">animate + obj:</span><span>→ AVERE</span></div><div class="rule-row"><span class="rule-key"></span><span>Ho finito l'articolo. <span class="rule-eg">(I finished the article.)</span></span></div>`
+  },
+  {
+    type: "rule", word: "correre / volare — essere or avere?",
+    english: "Depends on destination",
+    detail: `<div class="rule-row"><span class="rule-key">with dest.:</span><span>→ ESSERE</span></div><div class="rule-row"><span class="rule-key"></span><span>Sono corsi a casa. <span class="rule-eg">(They ran home.)</span></span></div><div class="rule-row" style="margin-top:6px"><span class="rule-key">no dest.:</span><span>→ AVERE</span></div><div class="rule-row"><span class="rule-key"></span><span>Ho corso una maratona. <span class="rule-eg">(I ran a marathon.)</span></span></div>`
+  },
+  {
+    type: "rule", word: "passare — essere or avere?",
+    english: "Depends on meaning",
+    detail: `<div class="rule-row"><span class="rule-key">"stop by":</span><span>→ ESSERE</span></div><div class="rule-row"><span class="rule-key"></span><span>Siamo passati da loro. <span class="rule-eg">(We stopped by theirs.)</span></span></div><div class="rule-row" style="margin-top:6px"><span class="rule-key">"spend time":</span><span>→ AVERE</span></div><div class="rule-row"><span class="rule-key"></span><span>Abbiamo passato l'estate. <span class="rule-eg">(We spent the summer.)</span></span></div>`
+  },
+  {
+    type: "rule", word: "salire / scendere — essere or avere?",
+    english: "Depends on preposition vs direct object",
+    detail: `<div class="rule-row"><span class="rule-key">+ preposition:</span><span>→ ESSERE</span></div><div class="rule-row"><span class="rule-key"></span><span>È salito sul palco. <span class="rule-eg">(He got on stage.)</span></span></div><div class="rule-row" style="margin-top:6px"><span class="rule-key">+ direct obj:</span><span>→ AVERE</span></div><div class="rule-row"><span class="rule-key"></span><span>Ho salito le scale. <span class="rule-eg">(I climbed the stairs.)</span></span></div>`
+  },
+  {
+    type: "rule", word: "dovere / volere / potere — auxiliary?",
+    english: "Follows the infinitive that comes after",
+    detail: `<div class="rule-row"><span class="rule-key">intrans. inf.:</span><span>→ ESSERE</span></div><div class="rule-row"><span class="rule-key"></span><span>Non siamo voluti andare. <span class="rule-eg">(We didn't want to go.)</span></span></div><div class="rule-row" style="margin-top:6px"><span class="rule-key">direct obj.:</span><span>→ AVERE</span></div><div class="rule-row"><span class="rule-key"></span><span>Non ho potuto trovarlo. <span class="rule-eg">(I couldn't find it.)</span></span></div>`
+  },
+  {
+    type: "rule", word: "Adverb placement — passato prossimo",
+    english: "auxiliary + ADVERB + participle",
+    detail: `<div class="rule-row"><span class="rule-key">appena</span><span>= just &nbsp; <span class="rule-eg">Sono appena tornata.</span></span></div><div class="rule-row"><span class="rule-key">già</span><span>= already &nbsp; <span class="rule-eg">Abbiamo già mangiato.</span></span></div><div class="rule-row"><span class="rule-key">ancora</span><span>= yet (negative) &nbsp; <span class="rule-eg">Non ho ancora letto.</span></span></div><div class="rule-row"><span class="rule-key">mai</span><span>= ever/never &nbsp; <span class="rule-eg">Non sono mai stato a Roma.</span></span></div>`
+  }
 ];
 
 const aggettivi = [
@@ -937,6 +1100,18 @@ const varie = [
   { type: "noun", category: "varie", word: "il canale",         english: "channel / canal" }
 ];
 
+const qualsiasi = [
+  { type: "noun", category: "qualsiasi", word: "più / ormai",          english: "anymore" },
+  { type: "noun", category: "qualsiasi", word: "qualsiasi cosa",        english: "anything" },
+  { type: "noun", category: "qualsiasi", word: "chiunque",              english: "anyone" },
+  { type: "noun", category: "qualsiasi", word: "qualcuno",              english: "anybody" },
+  { type: "noun", category: "qualsiasi", word: "ovunque",               english: "anywhere" },
+  { type: "noun", category: "qualsiasi", word: "comunque",              english: "anyway" },
+  { type: "noun", category: "qualsiasi", word: "in qualsiasi posto",    english: "anyplace" },
+  { type: "noun", category: "qualsiasi", word: "qualcos'altro",         english: "anything else" },
+  { type: "noun", category: "qualsiasi", word: "qualcun altro",         english: "anyone else" },
+];
+
 const espressioni = [
   { type: "expression", word: "Scusi, dov'è...?",             english: "Excuse me, where is...?" },
   { type: "expression", word: "Come arrivo a...?",            english: "How do I get to...?" },
@@ -1108,6 +1283,8 @@ const pronouns = ["io","tu","lui/lei","noi","voi","loro"];
 
 const categories = {
   verbi:       { data: verbi,       title: "Gli Verbi Irregolari" },
+  participi:   { data: participi,   title: "Participi Passati" },
+  regole:      { data: regole,      title: "Grammar Rules" },
   avverbi:     { data: avverbi,     title: "Gli Avverbi di Frequenza" },
   aggettivi:   { data: aggettivi,   title: "Gli Aggettivi" },
   casa:        { data: casa,        title: "La Casa" },
@@ -1127,11 +1304,12 @@ const categories = {
   animali:     { data: animali,     title: "Gli Animali" },
   cibo:        { data: cibo,        title: "Il Cibo" },
   varie:       { data: varie,       title: "Varie" },
+  qualsiasi:   { data: qualsiasi,   title: "Indefiniti (Any-)" },
   all: {
-    data: [...verbi, ...avverbi, ...aggettivi, ...casa, ...citta, ...trasporti,
+    data: [...verbi, ...participi, ...regole, ...avverbi, ...aggettivi, ...casa, ...citta, ...trasporti,
             ...espressioni, ...negozi, ...preposizioni, ...alloggio, ...hotel,
             ...mesi, ...oggetti, ...stagioni, ...tempo, ...domande,
-            ...saluti, ...animali, ...cibo, ...varie],
+            ...saluti, ...animali, ...cibo, ...varie, ...qualsiasi],
     title: "Tutto"
   }
 };
@@ -1151,7 +1329,8 @@ const categoryLabels = {
   saluti:      "saluti e cortesia",
   animali:     "gli animali",
   cibo:        "il cibo",
-  varie:       "varie"
+  varie:       "varie",
+  qualsiasi:   "indefiniti (any-)"
 };
 
 let activeCategory = "all";
@@ -1224,7 +1403,8 @@ function showCard() {
 
   const backEl    = document.getElementById("card-back");
   const conjEl    = document.getElementById("conjugation");
-  const ppEl      = document.getElementById("past-participle");
+  const ppNoteEl  = document.getElementById("past-participle-note");
+  const auxBadgeEl= document.getElementById("auxiliary-badge");
   const exEl      = document.getElementById("example");
   const catLabel  = document.getElementById("category-label");
   const englishEl = document.getElementById("english");
@@ -1233,8 +1413,10 @@ function showCard() {
   backEl.className = "card-face card-back";
   conjEl.innerHTML = "";
   conjEl.style.display = "none";
-  ppEl.innerHTML = "";
-  ppEl.style.display = "none";
+  ppNoteEl.innerHTML = "";
+  ppNoteEl.style.display = "none";
+  auxBadgeEl.innerHTML = "";
+  auxBadgeEl.style.display = "none";
   exEl.innerHTML = "";
   exEl.style.display = "none";
 
@@ -1250,11 +1432,23 @@ function showCard() {
       row.innerHTML = `<span class="pronoun">${pronouns[i]}</span><span class="form">${item.conjugation[i]}</span>`;
       conjEl.appendChild(row);
     }
-    ppEl.style.display = "";
-    ppEl.innerHTML = `<span class="pp-label">participio passato</span><span class="pp-form">${item.pastParticiple}</span>`;
+    if (item.pastParticiple) {
+      const auxClass = item.auxiliary === "essere" ? "essere" : item.auxiliary === "avere" ? "avere" : "both";
+      ppNoteEl.style.display = "";
+      ppNoteEl.innerHTML = `<span class="pp-label">participio passato</span>${item.pastParticiple} <small style="color:#556;font-size:0.75rem">(${item.auxiliary})</small>`;
+    }
+  } else if (item.type === "participle") {
+    backEl.classList.add("participi-back");
+    catLabel.textContent = "participio passato";
+    englishEl.textContent = item.participle;
+    const auxClass = item.auxiliary === "essere" ? "essere" : item.auxiliary === "avere" ? "avere" : "both";
+    auxBadgeEl.style.display = "";
+    auxBadgeEl.innerHTML = `<span class="auxiliary-badge ${auxClass}">${item.auxiliary}</span>`;
+    exEl.style.display = "";
+    exEl.innerHTML = `${item.english}`;
   } else if (item.type === "adverb") {
     backEl.classList.add("adverb-back");
-    catLabel.textContent = "avverbio di frequenza";
+    catLabel.textContent = "avverbio";
     exEl.style.display = "";
     exEl.innerHTML = item.example;
   } else if (item.type === "adjective") {
@@ -1269,6 +1463,11 @@ function showCard() {
   } else if (item.type === "preposition") {
     backEl.classList.add("preposizioni-back");
     catLabel.textContent = "preposizione";
+  } else if (item.type === "rule") {
+    backEl.classList.add("regole-back");
+    catLabel.textContent = "grammar rule";
+    exEl.style.display = "";
+    exEl.innerHTML = item.detail;
   }
 
   document.getElementById("progress").textContent = `${currentIndex + 1} / ${deck.length}`;
