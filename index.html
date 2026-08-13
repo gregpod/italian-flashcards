@@ -313,6 +313,12 @@
     border: 1px solid #5a2080;
   }
 
+  /* ── Slang back ── */
+  .card-back.slang-back {
+    background: linear-gradient(135deg, #2e0820, #3e1030);
+    border: 1px solid #80204a;
+  }
+
   /* ── Regole back ── */
   .card-back.regole-back {
     background: linear-gradient(135deg, #1e180a, #2c2210);
@@ -376,6 +382,7 @@
   .card-back.cibo-back .english        { color: #f0a060; }
   .card-back.varie-back .english       { color: #90c8f0; }
   .card-back.qualsiasi-back .english   { color: #d0a0f8; }
+  .card-back.slang-back .english       { color: #ff80b0; }
 
   .card-back .example {
     font-size: 1rem;
@@ -759,6 +766,7 @@
   <button onclick="setCategory('cibo')"       id="nav-cibo">Il Cibo</button>
   <button onclick="setCategory('varie')"      id="nav-varie">Varie</button>
   <button onclick="setCategory('qualsiasi')" id="nav-qualsiasi">Indefiniti (Any-)</button>
+  <button onclick="setCategory('slang')"     id="nav-slang">Italian Slang</button>
   <button onclick="setCategory('all')"        id="nav-all">Tutto</button>
 </nav>
 
@@ -1100,6 +1108,29 @@ const varie = [
   { type: "noun", category: "varie", word: "il canale",         english: "channel / canal" }
 ];
 
+const slang = [
+  { type: "noun", category: "slang", word: "uffa",            english: "ugh / how annoying! (expression of frustration)" },
+  { type: "noun", category: "slang", word: "vabbè",           english: "fine / whatever (also used as a filler)" },
+  { type: "noun", category: "slang", word: "insomma",         english: "in short / so-so / come on!" },
+  { type: "noun", category: "slang", word: "figurati",        english: "don't worry / you're welcome / imagine that" },
+  { type: "noun", category: "slang", word: "meno male",       english: "thank God (lit. 'less bad')" },
+  { type: "noun", category: "slang", word: "mannaggia",       english: "damn it / shoot!" },
+  { type: "noun", category: "slang", word: "macché",          english: "no way! / yeah right" },
+  { type: "noun", category: "slang", word: "appunto",         english: "exactly! (also: note / jot)" },
+  { type: "noun", category: "slang", word: "già",             english: "already / exactly / yeah" },
+  { type: "noun", category: "slang", word: "esatto",          english: "exactly! / that's right!" },
+  { type: "noun", category: "slang", word: "boh",             english: "I don't know (untranslatable shrug)" },
+  { type: "noun", category: "slang", word: "figata",          english: "how cool! / a cool thing (noun)" },
+  { type: "noun", category: "slang", word: "figo / figa",     english: "cool / attractive person" },
+  { type: "noun", category: "slang", word: "che palle",       english: "how annoying! / what a pain" },
+  { type: "noun", category: "slang", word: "tipo",            english: "like (filler) / type" },
+  { type: "noun", category: "slang", word: "anche no",        english: "yeah no / hard pass" },
+  { type: "noun", category: "slang", word: "un sacco",        english: "a lot (replaces molto/tanto)" },
+  { type: "noun", category: "slang", word: "sfigato / sfigata", english: "loser" },
+  { type: "noun", category: "slang", word: "roba",            english: "stuff / thing (informal 'cosa')" },
+  { type: "noun", category: "slang", word: "scialla",         english: "chill / relax" },
+];
+
 const qualsiasi = [
   { type: "noun", category: "qualsiasi", word: "più / ormai",          english: "anymore" },
   { type: "noun", category: "qualsiasi", word: "qualsiasi cosa",        english: "anything" },
@@ -1305,11 +1336,12 @@ const categories = {
   cibo:        { data: cibo,        title: "Il Cibo" },
   varie:       { data: varie,       title: "Varie" },
   qualsiasi:   { data: qualsiasi,   title: "Indefiniti (Any-)" },
+  slang:       { data: slang,       title: "Italian Slang" },
   all: {
     data: [...verbi, ...participi, ...regole, ...avverbi, ...aggettivi, ...casa, ...citta, ...trasporti,
             ...espressioni, ...negozi, ...preposizioni, ...alloggio, ...hotel,
             ...mesi, ...oggetti, ...stagioni, ...tempo, ...domande,
-            ...saluti, ...animali, ...cibo, ...varie, ...qualsiasi],
+            ...saluti, ...animali, ...cibo, ...varie, ...qualsiasi, ...slang],
     title: "Tutto"
   }
 };
@@ -1330,7 +1362,8 @@ const categoryLabels = {
   animali:     "gli animali",
   cibo:        "il cibo",
   varie:       "varie",
-  qualsiasi:   "indefiniti (any-)"
+  qualsiasi:   "indefiniti (any-)",
+  slang:       "italian slang"
 };
 
 let activeCategory = "all";
